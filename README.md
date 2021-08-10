@@ -1,4 +1,4 @@
-# vue2模版
+# AS-Vue2Template
 
 #### 介绍
 mobile分支是h5模版
