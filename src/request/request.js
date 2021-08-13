@@ -25,7 +25,7 @@ const httpCode = {        //这里我简单列出一些常见的http状态码信
 
 const instance = axios.create({    //创建axios实例
 	timeout: 10000, // 设置超时时间10s
-	baseURL: CONST.BASE_URL		  // 请求根路径		dev模式下为 api 走代理模式
+	baseURL: window.global_config.BASE_URL		  // 请求配置静态文件config/config.js		dev模式下为 api 走代理模式
 })
 
 
