@@ -34,6 +34,9 @@ const instance = axios.create({    //创建axios实例
 // 设置默认请求头
 instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';;
 
+// 跨域允许携带cookie
+instance.defaults.withCredentials = true 
+
 // 请求拦截器
 instance.interceptors.request.use(
 	request => {
