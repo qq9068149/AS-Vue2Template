@@ -6,18 +6,10 @@ vue2.x项目模板
 #### 软件架构
 软件架构说明
 
-
-#### 安装教程
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+> 已配置好vant ui 按需引入
+页面中需要使用的话 import { 组件 } from 'vant';
 
 #### 参与贡献
 
