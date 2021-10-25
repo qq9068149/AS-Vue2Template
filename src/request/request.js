@@ -3,25 +3,11 @@
  * 请求拦截、相应拦截、错误统一处理=
  */
 
-// import CONST from '@/utils/CONST.js'
-import CONST from '@/utils/CONST'
 import router from '@/router/index'
 import { Toast } from 'vant';
 import axios from 'axios'
-import QS from 'qs'
 
 let loadingInstance = null				// 全局加载loadding
-const httpCode = {        //这里我简单列出一些常见的http状态码信息，可以自己去调整配置
-	400: '请求参数错误',
-	401: '权限不足, 请重新登录',
-	403: '服务器拒绝本次访问',
-	404: '请求资源未找到',
-	500: '内部服务器错误',
-	501: '服务器不支持该请求中使用的方法',
-	502: '网关错误',
-	504: '网关超时'
-}
-
 
 const instance = axios.create({    //创建axios实例
 	timeout: 10000, // 设置超时时间10s
@@ -30,7 +16,7 @@ const instance = axios.create({    //创建axios实例
 
 
 // 设置默认请求头
-instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';;
+instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 // 跨域允许携带cookie
 instance.defaults.withCredentials = true 
@@ -58,7 +44,6 @@ instance.interceptors.request.use(
 		return request
 	},
 	error => {
-		Message.error(error.message, '请求错误');
 		return error
 	}
 )
@@ -76,7 +61,7 @@ instance.interceptors.response.use(
 		// 1002:非法令牌和令牌过期 5012:其他客户端登录  6005 登录过期
 		if (code === 1002 || code === 5012 || code == 6005) {
 			// 清除本地所有数据
-			localStorage.clear()
+			// localStorage.clear()
 
 			// 返回登录页面
 			router.push({
@@ -99,17 +84,9 @@ instance.interceptors.response.use(
 		}
 		if (error.response) {
 			// 根据请求失败的http状态码去给用户相应的提示
-			let tips = error.response.status in httpCode ? httpCode[error.response.status] : error.response.data.message
-			Message({
-				message: tips,
-				type: 'error'
-			})
+
 			return Promise.reject(error)
 		} else {
-			Message({
-				message: '请求超时, 请刷新重试',
-				type: 'error'
-			})
 			console.error(`请求错误${error}`)
 			return Promise.reject(new Error('请求超时, 请刷新重试'))
 		}
@@ -145,6 +122,11 @@ export function post(url, params) {
 	return new Promise((resolve, reject) => {
 		instance.post(url, params)
 			.then(res => {
+        // 响应拦截 状态success为false 提示msg
+        if (!res.success) {
+          Toast.fail(res.msg)
+          return console.log(res.msg, '------------------')
+        }
 				resolve(res.data);
 			})
 			.catch(err => {
